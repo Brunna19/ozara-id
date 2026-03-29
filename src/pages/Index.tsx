@@ -1,16 +1,47 @@
-// Update this page (the content is just a fallback if you fail to update the page)
+import { useState, useCallback } from "react";
+import SplashScreen from "@/components/SplashScreen";
+import OnboardingFlow from "@/components/OnboardingFlow";
+import GeneratingScreen from "@/components/GeneratingScreen";
+import Dashboard from "@/components/Dashboard";
+import {
+  type Mood,
+  type Environment,
+  type Occasion,
+  type OlfactoryProfile,
+  generateProfile,
+} from "@/lib/fragranceEngine";
 
-// IMPORTANT: Fully REPLACE this with your own code
-const PlaceholderIndex = () => {
-  // PLACEHOLDER: Replace this entire return statement with the user's app.
-  // The inline background color is intentionally not part of the design system.
-  return (
-    <div className="flex min-h-screen items-center justify-center" style={{ backgroundColor: '#fcfbf8' }}>
-      <img data-lovable-blank-page-placeholder="REMOVE_THIS" src="/placeholder.svg" alt="Your app will live here!" />
-    </div>
-  );
+type AppState = "splash" | "onboarding" | "generating" | "dashboard";
+
+const Index = () => {
+  const [state, setState] = useState<AppState>("splash");
+  const [profile, setProfile] = useState<OlfactoryProfile | null>(null);
+  const [inputs, setInputs] = useState<{ mood: Mood; env: Environment; occasion: Occasion } | null>(null);
+
+  const handleOnboardingComplete = useCallback((mood: Mood, env: Environment, occasion: Occasion) => {
+    setInputs({ mood, env, occasion });
+    setProfile(generateProfile(mood, env, occasion));
+    setState("generating");
+  }, []);
+
+  const handleGeneratingDone = useCallback(() => {
+    setState("dashboard");
+  }, []);
+
+  const handleReset = useCallback(() => {
+    setState("splash");
+    setProfile(null);
+    setInputs(null);
+  }, []);
+
+  if (state === "splash") return <SplashScreen onStart={() => setState("onboarding")} />;
+  if (state === "onboarding") return <OnboardingFlow onComplete={handleOnboardingComplete} />;
+  if (state === "generating") return <GeneratingScreen onDone={handleGeneratingDone} />;
+  if (state === "dashboard" && profile && inputs) {
+    return <Dashboard profile={profile} mood={inputs.mood} env={inputs.env} occasion={inputs.occasion} onReset={handleReset} />;
+  }
+
+  return null;
 };
-
-const Index = PlaceholderIndex;
 
 export default Index;
