@@ -31,6 +31,7 @@ const timeLabels: { value: TimeOfDay; label: string; icon: string }[] = [
 const Dashboard = ({ profile, mood, env, occasion, onReset }: DashboardProps) => {
   const [activeTime, setActiveTime] = useState<TimeOfDay>("afternoon");
   const [activeTab, setActiveTab] = useState<"scent" | "evolution" | "insights" | "adaptive" | "sustainability">("scent");
+  const [showShare, setShowShare] = useState(false);
   const adaptiveScent = getAdaptiveScent(profile, activeTime);
   const insights = generateInsights(mood, env, occasion, profile);
 

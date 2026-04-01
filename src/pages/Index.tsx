@@ -16,8 +16,8 @@ type AppState = "splash" | "onboarding" | "generating" | "dashboard";
 
 const pageVariants = {
   initial: { opacity: 0, scale: 0.98 },
-  animate: { opacity: 1, scale: 1, transition: { duration: 0.5, ease: "easeOut" } },
-  exit: { opacity: 0, scale: 1.02, transition: { duration: 0.35, ease: "easeIn" } },
+  animate: { opacity: 1, scale: 1, transition: { duration: 0.5, ease: "easeOut" as const } },
+  exit: { opacity: 0, scale: 1.02, transition: { duration: 0.35, ease: "easeIn" as const } },
 };
 
 const Index = () => {
