@@ -2,6 +2,7 @@ import { useRef, useState } from "react";
 import { motion } from "framer-motion";
 import { toPng } from "html-to-image";
 import { type OlfactoryProfile } from "@/lib/fragranceEngine";
+import { toast } from "@/hooks/use-toast";
 
 interface ShareScentCardProps {
   profile: OlfactoryProfile;
