@@ -163,7 +163,14 @@ const ShareScentCard = ({ profile, onClose }: ShareScentCardProps) => {
             disabled={downloading}
             className="px-6 py-2.5 rounded-full text-xs font-sans tracking-wider uppercase gradient-gold text-primary-foreground hover:opacity-90 transition-opacity disabled:opacity-50"
           >
-            {downloading ? "Generating…" : "Download Image"}
+            {downloading ? "Generating…" : "Download"}
+          </button>
+          <button
+            onClick={handleCopy}
+            disabled={downloading}
+            className="px-6 py-2.5 rounded-full text-xs font-sans tracking-wider uppercase glass-card text-foreground hover:opacity-90 transition-opacity disabled:opacity-50 border border-primary/30"
+          >
+            Copy to Clipboard
           </button>
           <button
             onClick={onClose}
