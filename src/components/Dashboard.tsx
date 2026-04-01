@@ -61,9 +61,14 @@ const Dashboard = ({ profile, mood, env, occasion, onReset }: DashboardProps) =>
             <h1 className="text-xl font-serif gradient-gold-text">OZARA</h1>
             <span className="text-xs text-muted-foreground tracking-wider">ID</span>
           </div>
-          <button onClick={onReset} className="text-xs text-muted-foreground hover:text-primary transition-colors font-sans tracking-wider uppercase">
-            New Profile
-          </button>
+          <div className="flex items-center gap-4">
+            <button onClick={() => setShowShare(true)} className="text-xs text-primary hover:text-primary/80 transition-colors font-sans tracking-wider uppercase">
+              Share Scent
+            </button>
+            <button onClick={onReset} className="text-xs text-muted-foreground hover:text-primary transition-colors font-sans tracking-wider uppercase">
+              New Profile
+            </button>
+          </div>
         </div>
       </header>
 
