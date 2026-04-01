@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
+import FragranceBottle from "./FragranceBottle";
 import {
   type OlfactoryProfile,
   type Mood,
@@ -89,27 +90,30 @@ const Dashboard = ({ profile, mood, env, occasion, onReset }: DashboardProps) =>
             {/* Hero Card */}
             <motion.div variants={item} className="glass-card rounded-2xl p-8 glow-gold relative overflow-hidden">
               <div className="absolute top-0 right-0 w-48 h-48 rounded-full blur-[80px] opacity-20" style={{ background: profile.color }} />
-              <div className="relative z-10">
-                <p className="text-xs tracking-[0.3em] uppercase text-muted-foreground mb-2 font-sans">Your Olfactory Identity</p>
-                <h2 className="text-4xl md:text-5xl font-serif mb-3 gradient-gold-text">{profile.scentName}</h2>
-                <p className="text-muted-foreground font-sans max-w-lg leading-relaxed">{profile.description}</p>
+              <div className="relative z-10 flex flex-col md:flex-row items-center gap-8">
+                <div className="flex-1">
+                  <p className="text-xs tracking-[0.3em] uppercase text-muted-foreground mb-2 font-sans">Your Olfactory Identity</p>
+                  <h2 className="text-4xl md:text-5xl font-serif mb-3 gradient-gold-text">{profile.scentName}</h2>
+                  <p className="text-muted-foreground font-sans max-w-lg leading-relaxed">{profile.description}</p>
 
-                <div className="mt-6 flex items-center gap-6">
-                  <div>
-                    <p className="text-xs text-muted-foreground font-sans mb-1">Intensity</p>
-                    <div className="flex items-center gap-2">
-                      <div className="w-32 h-1.5 bg-muted rounded-full overflow-hidden">
-                        <motion.div
-                          initial={{ width: 0 }}
-                          animate={{ width: `${profile.intensity}%` }}
-                          transition={{ duration: 1.5, ease: "easeOut" }}
-                          className="h-full gradient-gold rounded-full"
-                        />
+                  <div className="mt-6 flex items-center gap-6">
+                    <div>
+                      <p className="text-xs text-muted-foreground font-sans mb-1">Intensity</p>
+                      <div className="flex items-center gap-2">
+                        <div className="w-32 h-1.5 bg-muted rounded-full overflow-hidden">
+                          <motion.div
+                            initial={{ width: 0 }}
+                            animate={{ width: `${profile.intensity}%` }}
+                            transition={{ duration: 1.5, ease: "easeOut" }}
+                            className="h-full gradient-gold rounded-full"
+                          />
+                        </div>
+                        <span className="text-sm font-sans text-primary">{profile.intensity}%</span>
                       </div>
-                      <span className="text-sm font-sans text-primary">{profile.intensity}%</span>
                     </div>
                   </div>
                 </div>
+                <FragranceBottle color={profile.color} intensity={profile.intensity} />
               </div>
             </motion.div>
 
