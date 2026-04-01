@@ -2,6 +2,7 @@ import { useRef, useState } from "react";
 import { motion } from "framer-motion";
 import { toPng } from "html-to-image";
 import { type OlfactoryProfile } from "@/lib/fragranceEngine";
+import { toast } from "@/hooks/use-toast";
 
 interface ShareScentCardProps {
   profile: OlfactoryProfile;
@@ -23,6 +24,22 @@ const ShareScentCard = ({ profile, onClose }: ShareScentCardProps) => {
       link.click();
     } catch {
       console.error("Failed to generate image");
+    } finally {
+      setDownloading(false);
+    }
+  };
+
+  const handleCopy = async () => {
+    if (!cardRef.current) return;
+    setDownloading(true);
+    try {
+      const dataUrl = await toPng(cardRef.current, { pixelRatio: 3, cacheBust: true });
+      const res = await fetch(dataUrl);
+      const blob = await res.blob();
+      await navigator.clipboard.write([new ClipboardItem({ "image/png": blob })]);
+      toast({ title: "Copied to clipboard", description: "Paste it into your favorite app!" });
+    } catch {
+      toast({ title: "Copy failed", description: "Your browser may not support clipboard image copy.", variant: "destructive" });
     } finally {
       setDownloading(false);
     }
@@ -146,7 +163,14 @@ const ShareScentCard = ({ profile, onClose }: ShareScentCardProps) => {
             disabled={downloading}
             className="px-6 py-2.5 rounded-full text-xs font-sans tracking-wider uppercase gradient-gold text-primary-foreground hover:opacity-90 transition-opacity disabled:opacity-50"
           >
-            {downloading ? "Generating…" : "Download Image"}
+            {downloading ? "Generating…" : "Download"}
+          </button>
+          <button
+            onClick={handleCopy}
+            disabled={downloading}
+            className="px-6 py-2.5 rounded-full text-xs font-sans tracking-wider uppercase glass-card text-foreground hover:opacity-90 transition-opacity disabled:opacity-50 border border-primary/30"
+          >
+            Copy to Clipboard
           </button>
           <button
             onClick={onClose}
