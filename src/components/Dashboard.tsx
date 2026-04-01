@@ -306,6 +306,10 @@ const Dashboard = ({ profile, mood, env, occasion, onReset }: DashboardProps) =>
           </motion.div>
         )}
       </main>
+
+      <AnimatePresence>
+        {showShare && <ShareScentCard profile={profile} onClose={() => setShowShare(false)} />}
+      </AnimatePresence>
     </div>
   );
 };
