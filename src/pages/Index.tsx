@@ -1,4 +1,5 @@
 import { useState, useCallback } from "react";
+import { AnimatePresence, motion } from "framer-motion";
 import SplashScreen from "@/components/SplashScreen";
 import OnboardingFlow from "@/components/OnboardingFlow";
 import GeneratingScreen from "@/components/GeneratingScreen";
@@ -12,6 +13,12 @@ import {
 } from "@/lib/fragranceEngine";
 
 type AppState = "splash" | "onboarding" | "generating" | "dashboard";
+
+const pageVariants = {
+  initial: { opacity: 0, scale: 0.98 },
+  animate: { opacity: 1, scale: 1, transition: { duration: 0.5, ease: "easeOut" } },
+  exit: { opacity: 0, scale: 1.02, transition: { duration: 0.35, ease: "easeIn" } },
+};
 
 const Index = () => {
   const [state, setState] = useState<AppState>("splash");
@@ -34,14 +41,42 @@ const Index = () => {
     setInputs(null);
   }, []);
 
-  if (state === "splash") return <SplashScreen onStart={() => setState("onboarding")} />;
-  if (state === "onboarding") return <OnboardingFlow onComplete={handleOnboardingComplete} />;
-  if (state === "generating") return <GeneratingScreen onDone={handleGeneratingDone} />;
-  if (state === "dashboard" && profile && inputs) {
-    return <Dashboard profile={profile} mood={inputs.mood} env={inputs.env} occasion={inputs.occasion} onReset={handleReset} />;
-  }
+  const renderScreen = () => {
+    switch (state) {
+      case "splash":
+        return (
+          <motion.div key="splash" variants={pageVariants} initial="initial" animate="animate" exit="exit" className="w-full">
+            <SplashScreen onStart={() => setState("onboarding")} />
+          </motion.div>
+        );
+      case "onboarding":
+        return (
+          <motion.div key="onboarding" variants={pageVariants} initial="initial" animate="animate" exit="exit" className="w-full">
+            <OnboardingFlow onComplete={handleOnboardingComplete} />
+          </motion.div>
+        );
+      case "generating":
+        return (
+          <motion.div key="generating" variants={pageVariants} initial="initial" animate="animate" exit="exit" className="w-full">
+            <GeneratingScreen onDone={handleGeneratingDone} />
+          </motion.div>
+        );
+      case "dashboard":
+        return profile && inputs ? (
+          <motion.div key="dashboard" variants={pageVariants} initial="initial" animate="animate" exit="exit" className="w-full">
+            <Dashboard profile={profile} mood={inputs.mood} env={inputs.env} occasion={inputs.occasion} onReset={handleReset} />
+          </motion.div>
+        ) : null;
+      default:
+        return null;
+    }
+  };
 
-  return null;
+  return (
+    <AnimatePresence mode="wait">
+      {renderScreen()}
+    </AnimatePresence>
+  );
 };
 
 export default Index;

@@ -1,6 +1,7 @@
 import { useState } from "react";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import FragranceBottle from "./FragranceBottle";
+import ShareScentCard from "./ShareScentCard";
 import {
   type OlfactoryProfile,
   type Mood,
