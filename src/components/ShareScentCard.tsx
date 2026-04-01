@@ -29,6 +29,22 @@ const ShareScentCard = ({ profile, onClose }: ShareScentCardProps) => {
     }
   };
 
+  const handleCopy = async () => {
+    if (!cardRef.current) return;
+    setDownloading(true);
+    try {
+      const dataUrl = await toPng(cardRef.current, { pixelRatio: 3, cacheBust: true });
+      const res = await fetch(dataUrl);
+      const blob = await res.blob();
+      await navigator.clipboard.write([new ClipboardItem({ "image/png": blob })]);
+      toast({ title: "Copied to clipboard", description: "Paste it into your favorite app!" });
+    } catch {
+      toast({ title: "Copy failed", description: "Your browser may not support clipboard image copy.", variant: "destructive" });
+    } finally {
+      setDownloading(false);
+    }
+  };
+
   return (
     <motion.div
       initial={{ opacity: 0 }}
